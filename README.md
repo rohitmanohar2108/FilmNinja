@@ -2,6 +2,8 @@
 
 - Create React app
 - Configured tailwind css 
+- Form validation 
+- UseEf Hook
 
 
 
