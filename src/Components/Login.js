@@ -1,12 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Header from "./Header";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
+import { checkValidData } from "../utils/validate";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
 
+  const email = useRef(null);
+  const password = useRef(null);
+
+  const handlebuttonClick = () => {
+  
+    const message = checkValidData(email.current.value, password.current.value);
+    setErrorMessage(message);
+
+    //sign In / sign up
+
+  };
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
@@ -20,7 +33,7 @@ const Login = () => {
       }}
     >
       <Header />
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-75"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-0"></div>
 
       <div className="flex items-center justify-center min-h-screen relative z-10">
         <form className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg p-8 rounded-lg shadow-lg w-11/12 md:w-3/12 max-w-md text-white z-20 transition-transform transform hover:scale-105">
@@ -40,6 +53,7 @@ const Login = () => {
           <div className="relative mb-4">
             <FaEnvelope className="absolute left-3 top-5 text-gray-400" />
             <input
+              ref={email}
               type="text"
               placeholder="Email Address"
               className="block w-full pl-10 p-4 bg-gray-700 bg-opacity-50 rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-sm hover:shadow-lg"
@@ -48,12 +62,17 @@ const Login = () => {
           <div className="relative mb-4">
             <FaLock className="absolute left-3 top-5 text-gray-400" />
             <input
+              ref={password}
               type="password"
               placeholder="Password"
               className="block w-full pl-10 p-4 bg-gray-700 bg-opacity-50 rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-sm hover:shadow-lg"
             />
           </div>
-          <button className="w-full p-4 mb-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:from-purple-500 hover:to-blue-500 transition duration-300 shadow-lg">
+          <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
+          <button
+            className="w-full p-4 mb-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:from-purple-500 hover:to-blue-500 transition duration-300 shadow-lg"
+            onClick={handlebuttonClick}
+          >
             {isSignInForm ? "Sign In" : "Sign Up"}
           </button>
           <div className="flex justify-between items-center mb-4">
@@ -69,13 +88,18 @@ const Login = () => {
               <FaFacebookF className="mr-2" /> Facebook
             </button>
           </div>
-          <p className="py-4 text-center cursor-pointer" onClick={toggleSignInForm}>
+          <p
+            className="py-4 text-center cursor-pointer"
+            onClick={toggleSignInForm}
+          >
             {isSignInForm
               ? "New to Netflix? Sign Up Now"
               : "Already have an account? Sign In"}
           </p>
           <p className="text-xs text-center">
-            <a href="#" className="text-blue-700 hover:underline">Forgot Password?</a>
+            <a href="#" className="text-blue-700 hover:underline">
+              Forgot Password?
+            </a>
           </p>
         </form>
       </div>
@@ -84,5 +108,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
