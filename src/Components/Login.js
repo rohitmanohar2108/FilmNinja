@@ -7,13 +7,20 @@ import { checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const nameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -31,7 +38,13 @@ const Login = () => {
           emailRef.current.value,
           passwordRef.current.value
         );
-        console.log(userCredential.user);
+        const user = userCredential.user;
+        await updateProfile(user, {
+          displayName: nameRef.current.value,
+        });
+        const { uid, email, displayName } = auth.currentUser;
+        dispatch(addUser({ uid: uid, email: email, displayName: displayName }));
+        navigate("/browse");
       } else {
         // Sign In Logic
         const userCredential = await signInWithEmailAndPassword(
@@ -40,6 +53,7 @@ const Login = () => {
           passwordRef.current.value
         );
         console.log(userCredential.user);
+        navigate("/browse");
       }
     } catch (error) {
       const errorCode = error.code;
@@ -79,6 +93,7 @@ const Login = () => {
             <div className="relative mb-4">
               <FaUser className="absolute left-3 top-5 text-gray-400" />
               <input
+                ref={nameRef}
                 type="text"
                 placeholder="Full Name"
                 className="block w-full pl-10 p-4 bg-gray-700 bg-opacity-50 rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-sm hover:shadow-lg"
