@@ -4,24 +4,59 @@ import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { checkValidData } from "../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const email = useRef(null);
-  const password = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
-  const handlebuttonClick = () => {
-  
-    const message = checkValidData(email.current.value, password.current.value);
+  const handleButtonClick = async (e) => {
+    e.preventDefault();
+    const message = checkValidData(emailRef.current.value, passwordRef.current.value);
     setErrorMessage(message);
+    if (message) return;
 
-    //sign In / sign up
-
+    try {
+      if (!isSignInForm) {
+        // Sign Up Logic
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          emailRef.current.value,
+          passwordRef.current.value
+        );
+        console.log(userCredential.user);
+      } else {
+        // Sign In Logic
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          emailRef.current.value,
+          passwordRef.current.value
+        );
+        console.log(userCredential.user);
+      }
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      if (errorCode === "auth/email-already-in-use") {
+        setErrorMessage(
+          "This email is already in use. Please sign in or reset your password."
+        );
+      } else {
+        setErrorMessage(`${errorCode} - ${errorMessage}`);
+      }
+    }
   };
+
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
+    setErrorMessage(null); // Clear error message when toggling the form
   };
 
   return (
@@ -53,7 +88,7 @@ const Login = () => {
           <div className="relative mb-4">
             <FaEnvelope className="absolute left-3 top-5 text-gray-400" />
             <input
-              ref={email}
+              ref={emailRef}
               type="text"
               placeholder="Email Address"
               className="block w-full pl-10 p-4 bg-gray-700 bg-opacity-50 rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-sm hover:shadow-lg"
@@ -62,7 +97,7 @@ const Login = () => {
           <div className="relative mb-4">
             <FaLock className="absolute left-3 top-5 text-gray-400" />
             <input
-              ref={password}
+              ref={passwordRef}
               type="password"
               placeholder="Password"
               className="block w-full pl-10 p-4 bg-gray-700 bg-opacity-50 rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-sm hover:shadow-lg"
@@ -71,7 +106,7 @@ const Login = () => {
           <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
           <button
             className="w-full p-4 mb-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:from-purple-500 hover:to-blue-500 transition duration-300 shadow-lg"
-            onClick={handlebuttonClick}
+            onClick={handleButtonClick}
           >
             {isSignInForm ? "Sign In" : "Sign Up"}
           </button>
