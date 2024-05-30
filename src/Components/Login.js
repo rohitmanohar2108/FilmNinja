@@ -10,14 +10,13 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate();
+ 
   const dispatch = useDispatch();
 
   const nameRef = useRef(null);
@@ -26,7 +25,10 @@ const Login = () => {
 
   const handleButtonClick = async (e) => {
     e.preventDefault();
-    const message = checkValidData(emailRef.current.value, passwordRef.current.value);
+    const message = checkValidData(
+      emailRef.current.value,
+      passwordRef.current.value
+    );
     setErrorMessage(message);
     if (message) return;
 
@@ -44,7 +46,6 @@ const Login = () => {
         });
         const { uid, email, displayName } = auth.currentUser;
         dispatch(addUser({ uid: uid, email: email, displayName: displayName }));
-        navigate("/browse");
       } else {
         // Sign In Logic
         const userCredential = await signInWithEmailAndPassword(
@@ -52,8 +53,6 @@ const Login = () => {
           emailRef.current.value,
           passwordRef.current.value
         );
-        console.log(userCredential.user);
-        navigate("/browse");
       }
     } catch (error) {
       const errorCode = error.code;
