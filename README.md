@@ -12,6 +12,12 @@
 - Implemented Sign Out 
 - Update profile
 -  fetch from tmdb movies movies
+- bug fix of sign up user, display name
+- bug fix if user is not log in redirect browse to login page and vice/versa
+- unsubscribe to the on Auth state change call back
+- Add hardcoded values to the constraints files
+- Register for tmdb Api & create an new app and get acess token
+- Get data from tmdb now playing movies list API
 
 
 
