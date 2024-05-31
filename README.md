@@ -18,6 +18,13 @@
 - Add hardcoded values to the constraints files
 - Register for tmdb Api & create an new app and get acess token
 - Get data from tmdb now playing movies list API
+- costume hooks for noe playing movies
+- update store with movoe data
+- planing for main container and secondary containery
+- fetch data for trailer video
+- update store with trailer video data
+- embeded the you tube video and make it autoplay and mute
+- added tailwind css to make make container look nice
 
 
 
