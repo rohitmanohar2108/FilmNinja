@@ -12,6 +12,7 @@ import {
 import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { BG_URL } from "../utils/constants";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -76,8 +77,7 @@ const Login = () => {
     <div
       className="relative min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage:
-          "url('https://lh3.googleusercontent.com/proxy/8XiJPoL9rz1oEb1iUuBbvxeHG84WeU5tMm9DaglBTGX2H2jJqcV2F8xYUmPovkH66eU74SfEGYzIeXXIT87cy0WAZ8jQVPBWk85IQGh6V5QG_t5zt_W3c5hfYIUvqRylK9YDrKdqhdohgh3pQo3A=w3840-h2160-p-k-no-nd-mv')",
+        backgroundImage: `url(${BG_URL})`, // Set the background image using BG_URL
       }}
     >
       <Header />

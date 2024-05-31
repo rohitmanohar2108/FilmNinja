@@ -31,6 +31,7 @@
 - Found out tmdb image cdn url
 - Made Browse UI look better
 - Created respective costom hooks
+- GPT search features
 
 
 
