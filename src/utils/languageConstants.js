@@ -7,7 +7,7 @@ const lang = {
     search: "खोज",
     gptSearchPlaceholder: "आज आप क्या देखना चाहेंगे?",
   },
-  Spanish: {
+  spanish: {
     search: "buscar",
     gptSearchPlaceholder: "¿Qué te gustaría ver hoy?",
   },
