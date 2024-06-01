@@ -13,7 +13,8 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((store) => store.user);
-  const showGptSearch = useSelector((store) => store.showGptSearch);
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch); // Corrected store access for showGptSearch
+  const currentLanguage = useSelector((store) => store.config.lang); // Added selector for current language
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -41,7 +42,6 @@ const Header = () => {
   };
 
   const handleGptSearchClick = () => {
-    //Toggle gpt search
     dispatch(toggleGptSearchView());
   };
 
@@ -50,13 +50,14 @@ const Header = () => {
   };
 
   return (
-    <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between">
+    <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between items-center">
       <img className="w-44" src={LOGO} alt="Logo" />
       {currentUser && (
         <div className="flex items-center space-x-4">
           {showGptSearch && (
             <select
-              className="p-2 m-2 bg-gray-900 text-white"
+              value={currentLanguage} // Set the current selected language
+              className="p-2 m-2 bg-gray-900 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               onChange={handleLanguageChange}
             >
               {SUPPORTED_LANGUAGES.map((lang) => (
@@ -70,7 +71,7 @@ const Header = () => {
             className="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg hover:from-teal-500 hover:to-green-500 transition duration-300 shadow-lg text-white font-semibold"
             onClick={handleGptSearchClick}
           >
-            GPT Search
+           {showGptSearch?"Homepage": "GPT Search"}
           </button>
           <button
             onClick={handleSignOut}
